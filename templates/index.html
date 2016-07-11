@@ -1,0 +1,30 @@
+{% import "macros.html" as m %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CLAPPS Applications</title>
+</head>
+<body>
+<h1>CLAPPS Applications</h1>
+
+<form action="/" method="post" enctype="multipart/form-data">
+    {{ m.swtf(form.lastname) }}
+    {{ m.swtf(form.firstname) }}
+    {{ m.swtf(form.email) }}
+    {{ m.swtf(form.level) }}
+    {{ m.swtf(form.disability) }}
+    {{ m.swtf(form.birthday) }}
+    {{ m.swtf(form.nationality) }}
+
+    <button id="submit" name="submit" type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+
+
+
+</body>
+</html>

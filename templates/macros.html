@@ -1,0 +1,91 @@
+
+{% macro controlgroup(for, title) -%}
+<div class="control-group">
+    <label class="control-label" for={{ for }}>{{ title }}</label>
+    <div class="controls">
+        {{ caller() }}
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro tf(id, label) -%}
+<input id={{ id }} name={{ id }} type="text" placeholder={{ label }} class="input-xlarge" />
+{%- endmacro %}
+
+{% macro sub(name, label, class) -%}
+<input id={{ name }} name={{ name }} value={{ label }} type="submit" class='{{ class }}' />
+{%- endmacro %}
+
+{% macro sel(name, selectedItem, values) -%}
+<select id={{ name }} name={{ name }} class="input-xlarge">
+    {% for v in values %}
+        {% with -%}
+            {% if v[0] == selectedItem -%}
+                {% set s = "selected=selected" %}
+            {% else %}
+                {% set s = "" %}
+            {% endif %}
+            <option {{ s }} value={{ v[0] }}>{{ v[1] }}</option>
+        {%- endwith %}
+    {% endfor %}
+</select>
+{%- endmacro %}
+
+{% macro header(name, label) -%}
+<div class="control-group">
+    <label class="control-label" for='{{ name }}'></label>
+    <div class="controls">
+        <label id='{{ name }}' class="my-form-header">{{ label|safe }}</label>
+    </div>
+</div>
+{%- endmacro %}
+
+
+{# display WTF field #}
+{% macro wtf(field, fclass='') -%}
+  {% with %}
+        {% if field.errors %}
+            {% set class = "control-group error" %}
+        {% else %}
+            {% set class = "control-group" %}
+        {% endif %}
+
+        {% if not fclass %}
+            {% set fclass="input-xlarge" %}
+        {% endif %}
+
+    <div class='{{ class }}'>
+        {{ field.label(class="control-label") }}
+        <div class="controls">
+            {{ field(class=fclass) }}
+
+            {% for err in field.errors %}
+            <span class="help-inline">{{ err }} </span>
+            {% endfor %}
+        </div>
+    </div>
+  {% endwith %}
+{%- endmacro %}
+
+
+{# display WTF field #}
+{% macro swtf(field, fclass='') -%}
+  {% with %}
+        {% if field.errors %}
+            {% set class = "control-group error" %}
+        {% else %}
+            {% set class = "control-group" %}
+        {% endif %}
+
+        {% if not fclass %}
+            {% set fclass="input-xlarge" %}
+        {% endif %}
+
+        <div>{{ field.label() }}
+        {{ field() }}  {% for err in field.errors %}
+            <span class="help-inline">{{ err }} </span>
+            {% endfor %}
+            </div>
+  {% endwith %}
+{%- endmacro %}
+
