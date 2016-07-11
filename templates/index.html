@@ -1,30 +1,64 @@
+{% set title = "CLAPPS Application" %}
+
+{% extends "main.html" %}
 {% import "macros.html" as m %}
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>CLAPPS Applications</title>
-</head>
-<body>
-<h1>CLAPPS Applications</h1>
+{% block content %}
 
-<form action="/" method="post" enctype="multipart/form-data">
-    {{ m.swtf(form.lastname) }}
-    {{ m.swtf(form.firstname) }}
-    {{ m.swtf(form.email) }}
-    {{ m.swtf(form.level) }}
-    {{ m.swtf(form.disability) }}
-    {{ m.swtf(form.birthday) }}
-    {{ m.swtf(form.nationality) }}
+<div style="margin:10px">
+
+    <h1>{{ title }}</h1>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <hr/> <p class="text-danger"> {{ message }} </p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<form class="form-horizontal" action="/" method="post" enctype="multipart/form-data">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Information about yourself</h3></div>
+        <div class="panel-body">
+            {{ m.swtf(form.lastname) }}
+            {{ m.swtf(form.firstname) }}
+            {{ m.swtf(form.email) }}
+            {{ m.swtf(form.level) }}
+            {{ m.swtf(form.disability) }}
+            {{ m.swtf(form.birthday) }}
+            {{ m.swtf(form.nationality) }}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Letter of reference #1</h3></div>
+        <div class="panel-body">
+            <p>Please provide contact data for two colleagues whom we can approach for letters of reference.</p>
+
+            {{ m.swtf(form.lor1_lastname) }}
+            {{ m.swtf(form.lor1_firstname) }}
+            {{ m.swtf(form.lor1_email) }}
+            {{ m.swtf(form.lor1_affiliation) }}
+            {{ m.swtf(form.lor1_city) }}
+            {{ m.swtf(form.lor1_country) }}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Letter of reference #2</h3></div>
+        <div class="panel-body">
+            {{ m.swtf(form.lor2_lastname) }}
+            {{ m.swtf(form.lor2_firstname) }}
+            {{ m.swtf(form.lor2_email) }}
+            {{ m.swtf(form.lor2_affiliation) }}
+            {{ m.swtf(form.lor2_city) }}
+            {{ m.swtf(form.lor2_country) }}
+        </div>
+    </div>
 
     <button id="submit" name="submit" type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
-
-
-
-</body>
-</html>
+</div>
+{% endblock %}

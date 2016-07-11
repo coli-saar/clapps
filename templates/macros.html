@@ -41,51 +41,39 @@
 {%- endmacro %}
 
 
-{# display WTF field #}
-{% macro wtf(field, fclass='') -%}
-  {% with %}
-        {% if field.errors %}
-            {% set class = "control-group error" %}
-        {% else %}
-            {% set class = "control-group" %}
-        {% endif %}
-
-        {% if not fclass %}
-            {% set fclass="input-xlarge" %}
-        {% endif %}
-
-    <div class='{{ class }}'>
-        {{ field.label(class="control-label") }}
-        <div class="controls">
-            {{ field(class=fclass) }}
-
-            {% for err in field.errors %}
-            <span class="help-inline">{{ err }} </span>
-            {% endfor %}
-        </div>
-    </div>
-  {% endwith %}
-{%- endmacro %}
 
 
 {# display WTF field #}
 {% macro swtf(field, fclass='') -%}
   {% with %}
-        {% if field.errors %}
-            {% set class = "control-group error" %}
+        {% if field.errors|length > 0 %}
+            {% set clazz = "form-group has-error" %}
         {% else %}
-            {% set class = "control-group" %}
+            {% set clazz = "form-group" %}
         {% endif %}
 
-        {% if not fclass %}
-            {% set fclass="input-xlarge" %}
-        {% endif %}
-
-        <div>{{ field.label() }}
-        {{ field() }}  {% for err in field.errors %}
-            <span class="help-inline">{{ err }} </span>
-            {% endfor %}
+        <div class="{{ clazz }}">
+            {{ field.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ field(class="form-control", ** {"aria-describedby": "help_" + field.name}) }}
+                {% for err in field.errors %}
+                    <span id="help_{{ field.name }}" class="help-block">{{ err }} </span>
+                {% endfor %}
             </div>
+        </div>
   {% endwith %}
 {%- endmacro %}
 
+
+{# display WTF checkbox field #}
+{% macro cbox(field, fclass='') -%}
+  {% with %}
+        <div class="checkbox-inline col-sm-offset-2">
+            <label>
+                {{ field() }}
+                xxx
+                {{ field.description }}
+            </label>
+        </div>
+  {% endwith %}
+{%- endmacro %}
