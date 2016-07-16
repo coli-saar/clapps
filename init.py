@@ -11,11 +11,15 @@ import configparser
 conf = configparser.ConfigParser({  }) # pass default values in dictionary
 conf.read("clapps.conf")
 
+clapps_contact = "%s <%s>" % (conf.get("contact", "name"), conf.get("contact", "email"))
+
 
 # set up Flask
 app = Flask(__name__, static_url_path='')
 app.secret_key = conf.get("application", "secret")
 start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+app.config['UPLOAD_FOLDER'] = conf.get("application", "upload_dir")
 
 # set up database connection
 db_url = conf.get("database", "url")

@@ -1,15 +1,20 @@
 import datetime
+import os
 import traceback
 
 from flask import render_template
+from werkzeug.utils import secure_filename
 from wtforms.fields.core import BooleanField, DateTimeField
+from wtforms.validators import ValidationError
 from flask import request, flash
 
 from init import *
 
-from wtforms import Form, StringField, validators, SelectField, IntegerField, TextAreaField, BooleanField
+from wtforms import Form, StringField, validators, SelectField, IntegerField, TextAreaField, BooleanField, FileField
 
 from tables import *
+
+import mail
 
 
 @app.route("/", methods=["GET",])
@@ -21,6 +26,16 @@ def post_application():
     form = ApplicationForm(request.form)
 
     if form.validate():
+        remote_cv_file = request.files[form.cv_file.name]
+
+        if remote_cv_file.filename == '':
+            form.cv_file.errors.append("Please specify a PDF file which contains your CV.")
+            return render_template("index.html", form=form)
+
+        elif not allowed_file(remote_cv_file.filename):
+            form.cv_file.errors.append("File must be of one of these types: " + " ".join(ALLOWED_EXTENSIONS))
+            return render_template("index.html", form=form)
+
         disability = 1 if form.disability.data else 0
         new_app = Application(firstname=form.firstname.data, lastname=form.lastname.data,
                               birthday=form.birthday.data, application_time=datetime.datetime.now(),
@@ -28,28 +43,42 @@ def post_application():
                               nationality=form.nationality.data, email=form.email.data)
 
         try:
+            # store all data from application form
             session.add(new_app)
             session.commit()
 
             id = new_app.id
 
-            lor1 = Letter(app_id=id, firstname=form.lor1_firstname.data, lastname=form.lor1_lastname.data,
-                          email=form.lor1_email.data, city=form.lor1_city.data, country=form.lor1_country.data)
+            lor1 = Letter(app_id=id, firstname=form.lor1_firstname.data, lastname=form.lor1_lastname.data, email=form.lor1_email.data, city=form.lor1_city.data, country=form.lor1_country.data)
             session.add(lor1)
 
-            lor2 = Letter(app_id=id, firstname=form.lor2_firstname.data, lastname=form.lor2_lastname.data,
-                          email=form.lor2_email.data, city=form.lor2_city.data, country=form.lor2_country.data)
+            lor2 = Letter(app_id=id, firstname=form.lor2_firstname.data, lastname=form.lor2_lastname.data, email=form.lor2_email.data, city=form.lor2_city.data, country=form.lor2_country.data)
             session.add(lor2)
 
+            degree = Degree(app_id=id, university=form.deg_university.data, city=form.deg_city.data, degree=form.deg_degree.data, country=form.deg_country.data, subject=form.deg_subject.data, year=form.deg_year.data)
+            session.add(degree)
+
             session.commit()
+
+            # store uploaded CV
+            filename = secure_filename("%d-%s.pdf" % (id, form.lastname.data))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            remote_cv_file.save(file_path)
+
+            # notify contact person
+            mail.send(clapps_contact, "CLAPPS Application %d: %s %s" % (id, form.firstname.data, form.lastname.data),
+                      render_template("contact_notification.txt", form=form, id=id))
+
+            # notify applicant
+            mail.send("%s %s <%s>" % (form.firstname.data, form.lastname.data, form.email.data),
+                      "Job application submitted", render_template("applicant_notification.txt", form=form, id=id, conf=conf))
 
             return "Added record for %d" % id
 
         except Exception as e:
             print("exception: %s" % str(e))
             print(traceback.format_exc())
-            flash("An error occurred while adding your application. If the problem persists, please get in touch with XXX")
-            # TODO - XXX
+            flash("An error occurred while adding your application. If the problem persists, please get in touch with %s" % (clapps_contact))
             return render_template("index.html", form=form)
 
     else:
@@ -57,6 +86,13 @@ def post_application():
         return render_template("index.html", form=form)
 
 
+
+
+ALLOWED_EXTENSIONS = ["pdf"]
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.lower().rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 class ApplicationForm(Form):
@@ -67,6 +103,15 @@ class ApplicationForm(Form):
     level = SelectField("Level", choices=[("Postdoc", "Postdoc"), ("PhD Student", "PhD Student")])
     disability = BooleanField("Disability")
     nationality = SelectField("Nationality", choices=country_list)
+
+    cv_file = FileField(u'Your CV', [])
+
+    deg_degree = StringField("Degree", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the degree (PhD, MSc, etc.)"})
+    deg_subject = StringField("Subject", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the subject of the degree (computational linguistics, computer science, etc.)"})
+    deg_year = IntegerField("Year", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the year in which the degree was (or will be) awarded"})
+    deg_university = StringField("University", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the university that awarded the degree"})
+    deg_city = StringField("City", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the city where this university is located"})
+    deg_country = SelectField("Country", choices=country_list)
 
     lor1_firstname = StringField("First name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the first name of reference #1"})
     lor1_lastname = StringField("Last name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the last name of reference #1"})

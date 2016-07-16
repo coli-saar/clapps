@@ -1,0 +1,10 @@
+Dear {{ form.firstname.data }} {{ form.lastname.data }},
+
+thank you for submitting your job application at Saarland University!
+
+Once the application deadline has passed, we will review all applications
+and get back to you. Thank you for your patience.
+
+Best regards,
+{{ conf.get("contact", "name") }}
+

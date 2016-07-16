@@ -42,7 +42,7 @@ class Degree(Base):
     country = Column(String(2), ForeignKey('countries.code'))
     degree = Column(String(200))
     subject = Column(String(200))
-    date = Column(DateTime)
+    year = Column(Integer)
 
     application = relationship("Application", backref=backref("degrees"))
 

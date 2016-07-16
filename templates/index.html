@@ -19,20 +19,49 @@
 {% endwith %}
 
 <form class="form-horizontal" action="/" method="post" enctype="multipart/form-data">
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Information about yourself</h3></div>
         <div class="panel-body">
             {{ m.swtf(form.lastname) }}
             {{ m.swtf(form.firstname) }}
             {{ m.swtf(form.email) }}
             {{ m.swtf(form.level) }}
-            {{ m.swtf(form.disability) }}
             {{ m.swtf(form.birthday) }}
             {{ m.swtf(form.nationality) }}
+            {{ m.swtf(form.disability) }}
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h3 class="panel-title">Your CV</h3></div>
+        <div class="panel-body">
+            <p style="margin-bottom:1em">
+                Please upload your CV as a single PDF file. Include all information
+                in this PDF file that you feel is relevant to your application.
+        </p>
+
+            {{ m.swtf(form.cv_file) }}
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h3 class="panel-title">Your most recent degree</h3></div>
+        <div class="panel-body">
+        <p style="margin-bottom:1em">Please enter some information about your most recent degree. If you are about to complete
+        a higher degree (e.g. your PhD), enter that degree here. Provide a complete list of your
+            degrees in your CV.
+        </p>
+
+            {{ m.swtf(form.deg_degree) }}
+            {{ m.swtf(form.deg_subject) }}
+            {{ m.swtf(form.deg_year) }}
+            {{ m.swtf(form.deg_university) }}
+            {{ m.swtf(form.deg_city) }}
+            {{ m.swtf(form.deg_country) }}
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Letter of reference #1</h3></div>
         <div class="panel-body">
             <p>Please provide contact data for two colleagues whom we can approach for letters of reference.</p>
@@ -46,7 +75,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Letter of reference #2</h3></div>
         <div class="panel-body">
             {{ m.swtf(form.lor2_lastname) }}
