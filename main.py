@@ -65,8 +65,6 @@ def post_application():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             remote_cv_file.save(file_path)
 
-            return "Added record for %d" % id
-
             # notify contact person
             mail.send(id, clapps_contact, "CLAPPS Application %d: %s %s" % (id, form.firstname.data, form.lastname.data),
                       render_template("contact_notification.txt", form=form, id=id))
@@ -74,6 +72,8 @@ def post_application():
             # notify applicant
             mail.send(id, "%s %s <%s>" % (form.firstname.data, form.lastname.data, form.email.data),
                       "Job application submitted", render_template("applicant_notification.txt", form=form, id=id, conf=conf))
+
+            return render_template("confirm.html", form=form)
 
         except Exception as e:
             print("exception: %s" % str(e))

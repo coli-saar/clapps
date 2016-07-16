@@ -1,0 +1,31 @@
+{% set title = "CLAPPS Application" %}
+
+{% extends "main.html" %}
+{% import "macros.html" as m %}
+
+
+{% block content %}
+
+<div style="margin:10px">
+
+<h1>{{ title }}</h1>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <hr/> <p class="text-danger"> {{ message }} </p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<p>
+    Dear {{ form.firstname.data }} {{ form.lastname.data }},<br/><br/>
+    thank you for submitting your job application at Saarland University!<br/><br/>
+    Once the application deadline has passed, we will review all applications
+    and get back to you. Thank you for your patience.
+</p>
+
+
+</div>
+
+{% endblock %}
