@@ -1,4 +1,4 @@
-{% set title = "CLAPPS Application" %}
+{% set title = "Job Applications @ Coli" %}
 
 {% extends "main.html" %}
 {% import "macros.html" as m %}
@@ -8,6 +8,8 @@
 
 <div style="margin:10px">
 
+
+<form class="form-horizontal col-md-8" action="/" method="post" enctype="multipart/form-data">
     <h1>{{ title }}</h1>
 
 {% with messages = get_flashed_messages() %}
@@ -18,7 +20,21 @@
     {% endif %}
 {% endwith %}
 
-<form class="form-horizontal" action="/" method="post" enctype="multipart/form-data">
+    <p>&nbsp;<br/>
+        Welcome to the job applications system of the <a href="http://www.coli.uni-saarland.de/">Department of Computational Linguistics
+        and Phonetics</a> at <a href="http://www.uni-saarland.de/">Saarland University</a>.</p>
+
+    <p>On this page, you can submit your application for the following job opening:
+        <blockquote style="font-size: inherit"><strong>{{ conf.get("application", "code") }}</strong>:
+        <a href="{{ conf.get('application', 'url') }}">{{ conf.get('application', 'name') }}</a>
+</blockquote>
+    </p>
+
+    <p>Please enter the following information so we can process your application easily. Thank you!
+        <br/><br/>&nbsp;</p>
+
+
+
     <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Information about yourself</h3></div>
         <div class="panel-body">

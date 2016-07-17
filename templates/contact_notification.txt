@@ -5,8 +5,9 @@ you have just received a job application:
 ID: {{ id }}
 Name: {{ form.firstname.data }} {{ form.lastname.data }}
 Level: {{ form.level.data }}
+Affiliation: {{ form.affiliation.data }}, {{ form.aff_city.data }}, {{ form.aff_country.data }}
 Degree: {{ form.deg_degree.data }} in {{ form.deg_subject.data }} ({{ form.deg_university.data }}, {{ form.deg_year.data }})
 
 Best regards,
-CLAPPS application server.
+Applications@Coli application server.
 

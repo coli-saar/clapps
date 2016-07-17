@@ -18,9 +18,12 @@ class Application(Base):
     birthday = Column(DateTime)
     application_time = Column(DateTime)
     level = Column(String(200))
-    disability = Column(Integer)
+    # disability = Column(Integer)
     nationality = Column(String(2), ForeignKey('countries.code'))
     email = Column(String(200))
+    affiliation = Column(String(200))
+    aff_city = Column(String(200))
+    aff_country = Column(String(2), ForeignKey('countries.code'))
 
 
 class Country(Base):
@@ -52,8 +55,7 @@ class Letter(Base):
 
     id = Column(Integer, primary_key=True)
     app_id = Column(Integer, ForeignKey('applications.id'))
-    firstname = Column(String(200))
-    lastname = Column(String(200))
+    name = Column(String(200))
     email = Column(String(200))
     affiliation = Column(String(200))
     city = Column(String(200))

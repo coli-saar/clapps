@@ -16,10 +16,10 @@ clapps_contact = "%s <%s>" % (conf.get("contact", "name"), conf.get("contact", "
 
 # set up Flask
 app = Flask(__name__, static_url_path='')
-app.secret_key = conf.get("application", "secret")
+app.secret_key = conf.get("server", "secret")
 start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-app.config['UPLOAD_FOLDER'] = conf.get("application", "upload_dir")
+app.config['UPLOAD_FOLDER'] = conf.get("server", "upload_dir")
 
 # set up database connection
 db_url = conf.get("database", "url")
