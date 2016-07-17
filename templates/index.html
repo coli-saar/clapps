@@ -28,7 +28,8 @@
             {{ m.swtf(form.level) }}
             {{ m.swtf(form.birthday) }}
             {{ m.swtf(form.nationality) }}
-            {{ m.swtf(form.disability) }}
+            {# {{ m.swtf(form.disability) }} #}
+
         </div>
     </div>
 
@@ -37,10 +38,21 @@
         <div class="panel-body">
             <p style="margin-bottom:1em">
                 Please upload your CV as a single PDF file. Include all information
-                in this PDF file that you feel is relevant to your application.
+                in this PDF file that you feel is relevant to your application, but
+                at least: a statement of research interests; the CV with publication
+                list; and scans of degree certificates and transcripts.
         </p>
 
             {{ m.swtf(form.cv_file) }}
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading"><h3 class="panel-title">Your current affiliation</h3></div>
+        <div class="panel-body">
+            {{ m.swtf(form.affiliation) }}
+            {{ m.swtf(form.aff_city) }}
+            {{ m.swtf(form.aff_country) }}
         </div>
     </div>
 
@@ -66,24 +78,22 @@
         <div class="panel-body">
             <p>Please provide contact data for two colleagues whom we can approach for letters of reference.</p>
 
-            {{ m.swtf(form.lor1_lastname) }}
-            {{ m.swtf(form.lor1_firstname) }}
+            {{ m.swtf(form.lor1_name) }}
             {{ m.swtf(form.lor1_email) }}
             {{ m.swtf(form.lor1_affiliation) }}
-            {{ m.swtf(form.lor1_city) }}
-            {{ m.swtf(form.lor1_country) }}
+            {# {{ m.swtf(form.lor1_city) }}
+            {{ m.swtf(form.lor1_country) }} #}
         </div>
     </div>
 
     <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Letter of reference #2</h3></div>
         <div class="panel-body">
-            {{ m.swtf(form.lor2_lastname) }}
-            {{ m.swtf(form.lor2_firstname) }}
+            {{ m.swtf(form.lor2_name) }}
             {{ m.swtf(form.lor2_email) }}
             {{ m.swtf(form.lor2_affiliation) }}
-            {{ m.swtf(form.lor2_city) }}
-            {{ m.swtf(form.lor2_country) }}
+            {# {{ m.swtf(form.lor2_city) }}
+            {{ m.swtf(form.lor2_country) }} #}
         </div>
     </div>
 

@@ -8,6 +8,10 @@ from wtforms.fields.core import BooleanField, DateTimeField
 from wtforms.validators import ValidationError
 from flask import request, flash
 
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
 from init import *
 
 from wtforms import Form, StringField, validators, SelectField, IntegerField, TextAreaField, BooleanField, FileField
@@ -101,8 +105,11 @@ class ApplicationForm(Form):
     lastname = StringField("Last name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter your last (family) name"})
     birthday = DateTimeField("Date of birth", format="%Y/%m/%d", render_kw={"placeholder": "Enter your birthday (YYYY/MM/DD)"})
     level = SelectField("Level", choices=[("Postdoc", "Postdoc"), ("PhD Student", "PhD Student")])
-    disability = BooleanField("Disability")
+    # disability = BooleanField("Disability")
     nationality = SelectField("Nationality", choices=country_list)
+    affiliation = StringField("Affiliation", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter your affiliation"})
+    aff_city = StringField("City", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the city where your affiliation is located"})
+    aff_country = SelectField("Country", choices=country_list)
 
     cv_file = FileField(u'Your CV', [])
 
@@ -113,19 +120,19 @@ class ApplicationForm(Form):
     deg_city = StringField("City", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the city where this university is located"})
     deg_country = SelectField("Country", choices=country_list)
 
-    lor1_firstname = StringField("First name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the first name of reference #1"})
-    lor1_lastname = StringField("Last name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the last name of reference #1"})
+    lor1_name = StringField("Name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the name of reference #1"})
+    # lor1_lastname = StringField("Last name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the last name of reference #1"})
     lor1_email = StringField("Email", validators=[validators.InputRequired(), validators.Email()], render_kw={"placeholder": "Enter the email address of reference #1"})
     lor1_affiliation = StringField("Affiliation", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the affiliation of reference #1"})
-    lor1_city = StringField("City", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the city where the affiliation of reference #1 is located"})
-    lor1_country = SelectField("Country", choices=country_list)
+    # lor1_city = StringField("City", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the city where the affiliation of reference #1 is located"})
+    # lor1_country = SelectField("Country", choices=country_list)
 
-    lor2_firstname = StringField("First name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the first name of reference #2"})
-    lor2_lastname = StringField("Last name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the last name of reference #2"})
+    lor2_name = StringField("Name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the name of reference #2"})
+    # lor2_lastname = StringField("Last name", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the last name of reference #2"})
     lor2_email = StringField("Email", validators=[validators.InputRequired(), validators.Email()], render_kw={"placeholder": "Enter the email address of reference #2"})
     lor2_affiliation = StringField("Affiliation", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the affiliation of reference #2"})
-    lor2_city = StringField("City", validators=[validators.InputRequired()], render_kw={ "placeholder": "Enter the city where the affiliation of reference #2 is located"})
-    lor2_country = SelectField("Country", choices=country_list)
+    # lor2_city = StringField("City", validators=[validators.InputRequired()], render_kw={ "placeholder": "Enter the city where the affiliation of reference #2 is located"})
+    # lor2_country = SelectField("Country", choices=country_list)
 
 
 #######################################################################################
@@ -133,5 +140,31 @@ class ApplicationForm(Form):
 #######################################################################################
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    # app.run(debug=True, host="0.0.0.0")
+
+
+    # use Tornado web server to host Flask app
+
+    all = logging.FileHandler('./tornado.log')
+    access = logging.FileHandler("./tornado-access.log")
+
+    logging.getLogger("tornado.access").addHandler(access)
+    logging.getLogger("tornado.access").setLevel(logging.DEBUG)
+
+    logging.getLogger("tornado.application").addHandler(all)
+    logging.getLogger("tornado.general").addHandler(all)
+    logging.getLogger("tornado.application").setLevel(logging.DEBUG)
+    logging.getLogger("tornado.general").setLevel(logging.DEBUG)
+
+
+
+    # args = sys.argv
+    # args.append("--log_file_prefix=./tornado.log")
+    # tornado.options.parse_command_line(args)
+
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(5000)
+    IOLoop.instance().start()
+
+
 

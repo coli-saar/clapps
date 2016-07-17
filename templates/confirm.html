@@ -18,14 +18,18 @@
     {% endif %}
 {% endwith %}
 
-<p>
-    Dear {{ form.firstname.data }} {{ form.lastname.data }},<br/><br/>
-    thank you for submitting your job application at Saarland University!<br/><br/>
-    Once the application deadline has passed, we will review all applications
-    and get back to you. Thank you for your patience.
-</p>
 
-
+<div class="panel panel-success">
+    <div class="panel-heading"><h3 class="panel-title">Confirmation</h3></div>
+        <div class="panel-body">
+            <p>
+                Dear {{ form.firstname.data }} {{ form.lastname.data }},<br/><br/>
+                thank you for submitting your job application at Saarland University!<br/><br/>
+                Once the application deadline has passed, we will review all applications
+                and get back to you. Thank you for your patience.
+            </p>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
