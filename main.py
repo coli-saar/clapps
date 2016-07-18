@@ -1,4 +1,5 @@
 import datetime
+from time import gmtime, strftime, localtime
 import os
 import traceback
 
@@ -76,10 +77,11 @@ def post_application():
                       render_template("contact_notification.txt", form=form, id=id))
 
             # notify applicant
-            mail.send(id, "%s %s <%s>" % (form.firstname.data, form.lastname.data, form.email.data),
-                      "Job application submitted", render_template("applicant_notification.txt", form=form, id=id, conf=conf))
+#            mail.send(id, "%s %s <%s>" % (form.firstname.data, form.lastname.data, form.email.data),
+#                      "Job application submitted", render_template("applicant_notification.txt", form=form, id=id, conf=conf))
 
-            return render_template("confirm.html", form=form)
+            timestamp = strftime("%d %b %Y at %H:%M:%S", localtime())
+            return render_template("confirm.html", form=form, id=id, timestamp=timestamp, conf=conf)
 
         except Exception as e:
             print("exception: %s" % str(e))

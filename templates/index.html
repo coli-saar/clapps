@@ -9,7 +9,7 @@
 <div style="margin:10px">
 
 
-<form class="form-horizontal col-md-8" action="/" method="post" enctype="multipart/form-data">
+<form class="form-horizontal col-md-8" action="{{ conf.get('server', 'path') }}" method="post" enctype="multipart/form-data">
     <h1>{{ title }}</h1>
 
 {% with messages = get_flashed_messages() %}

@@ -18,6 +18,7 @@
     {% endif %}
 {% endwith %}
 
+&nbsp;<br/>
 
 <div class="panel panel-success">
     <div class="panel-heading"><h3 class="panel-title">Confirmation</h3></div>
@@ -25,8 +26,17 @@
             <p>
                 Dear {{ form.firstname.data }} {{ form.lastname.data }},<br/><br/>
                 thank you for submitting your job application at Saarland University!<br/><br/>
+
+		We have received your application on {{ timestamp }}, and assigned it the application ID {{ id }}.<br/><br/>
+
+		Please print or save this page for your records. You will not receive
+		a separate confirmation by email.<br/><br/>
+
                 Once the application deadline has passed, we will review all applications
-                and get back to you. Thank you for your patience.
+                and get back to you. Thank you for your patience.<br/><br/>
+		
+		Best regards,<br/>
+		{{ conf.get("contact", "name") }} &lt;{{ conf.get("contact", "email") }}&gt;.
             </p>
         </div>
     </div>

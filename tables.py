@@ -58,7 +58,7 @@ class Letter(Base):
     name = Column(String(200))
     email = Column(String(200))
     affiliation = Column(String(200))
-    city = Column(String(200))
-    country = Column(String(2), ForeignKey('countries.code'))
+#    city = Column(String(200))
+#    country = Column(String(2), ForeignKey('countries.code'))
 
     application = relationship("Application", backref=backref("letters"))
