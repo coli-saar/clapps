@@ -151,14 +151,8 @@ if __name__ == "__main__":
     logging.getLogger("tornado.application").setLevel(logging.DEBUG)
     logging.getLogger("tornado.general").setLevel(logging.DEBUG)
 
-
-
-    # args = sys.argv
-    # args.append("--log_file_prefix=./tornado.log")
-    # tornado.options.parse_command_line(args)
-
     http_server = HTTPServer(WSGIContainer(app))
-    http_server.listen(5000)
+    http_server.listen(int(conf.get("server", "port")))
     IOLoop.instance().start()
 
 
