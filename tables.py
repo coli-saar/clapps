@@ -1,6 +1,7 @@
 # coding: utf-8
 
-from sqlalchemy import Column, DateTime, Float, Integer, SmallInteger, String, Table, text, ForeignKey, Unicode, Date
+from sqlalchemy import Column, DateTime, Float, Integer, SmallInteger, String, Table, text, ForeignKey, Unicode, Date, \
+    Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -24,6 +25,8 @@ class Application(Base):
     affiliation = Column(String(200))
     aff_city = Column(String(200))
     aff_country = Column(String(2), ForeignKey('countries.code'))
+    status = Column(Integer)
+    comments = Column(Text)
 
     s_nationality = relationship("Country", foreign_keys=[nationality])
     s_aff_country = relationship("Country", foreign_keys=[aff_country])

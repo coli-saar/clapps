@@ -10,11 +10,21 @@
 
     <h1>{{ title }}</h1>
 
-    <table id="applications" class="display table table-striped">
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <hr/> <p class="text-danger"> {{ message }} </p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table id="applications" class="display table">
         <thead>
         <tr>
             <th>ID</th>
             <th>Time</th>
+            <th>Status</th>
             <th width="16%">Name</th>
             <th width="8%">Level</th>
             <th>Affiliation</th>
@@ -24,11 +34,11 @@
 
         <tbody>
         {% for app in applications %}
-        <tr>
+        <tr bgcolor="{{ app.status | statuscolor }}">
             <td>{{ app.id }}</td>
             <td>{{ app.application_time | ft }}</td>
+            <td>{{ app.status }} - {{ app.status | statuslabel }}</td>
             <td>
-                <a href="mailto:{{ app.email }}" title="{{ app.email }}" ><img src="img/envelope.png" height="12px" /></a>
                 <a href="{{ app | cv_filename }}"> <img src="img/file.png" height="12px"/> </a>
 
                 <a href="show-application.html?id={{ app.id }}">{{ app.lastname }}, {{ app.firstname }}</a></td>

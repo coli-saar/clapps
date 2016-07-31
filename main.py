@@ -4,7 +4,7 @@ import os
 import traceback
 
 from flask import render_template
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename, redirect
 from wtforms.fields.core import BooleanField, DateTimeField
 from wtforms.validators import ValidationError
 from flask import request, flash
@@ -15,8 +15,8 @@ from tornado.ioloop import IOLoop
 
 from init import *
 
-from wtforms import Form, StringField, validators, SelectField, IntegerField, TextAreaField, BooleanField, FileField
-
+from wtforms import Form, StringField, validators, SelectField, IntegerField, TextAreaField, BooleanField, FileField, \
+    TextField
 from tables import *
 
 import mail
@@ -151,10 +151,43 @@ def show_application():
 
     id = int(request.args.get('id'))
     application = session.query(Application).filter(Application.id == id).first()
-    return render_template("show-application.html", application=application)
+    return render_template("show-application.html", application=application, form=ShowApplicationForm(status=application.status, comments=application.comments))
+
+@app.route("/show-application.html", methods=["POST",])
+def update_notes():
+    # TODO - authentication
+    id = int(request.args.get('id'))
+    application = session.query(Application).filter(Application.id == id).first()
+    form = ShowApplicationForm(request.form)
+
+    # print(request.form)
+
+    return_to_overview_page = "update_and_return" in request.form
+            # return_to_overview_page = True
 
 
+    if form.validate():
+        if form.delete.data == "Delete!":
+            session.query(Application).filter(Application.id == id).delete()
+            session.commit()
 
+            flash("Deleted application %d: %s, %s" % (application.id, application.lastname, application.firstname))
+            return_to_overview_page = True
+
+        else:
+            application.comments = form.comments.data
+            application.status = int(form.status.data)
+            session.commit()
+
+    if return_to_overview_page:
+        return redirect("/show-applications.html", code=302)
+    else:
+        return render_template("show-application.html", application=application, form=form)
+
+class ShowApplicationForm(Form):
+    status = SelectField("Change Status", choices=status_choices)
+    comments = TextAreaField('Notes')
+    delete = StringField("Delete")
 
 
 #######################################################################################

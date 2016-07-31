@@ -7,7 +7,7 @@
 {% block content %}
 
 <div class="content">
-    <h1>{{ application.firstname }} {{ application.lastname }}</h1>
+    <h1>{{ application.firstname }} {{ application.lastname }} <span style="float: right; clear: right"><a href="/show-applications.html">&#8679;</a></span></h1>
 
 
     <div class="panel panel-primary">
@@ -15,6 +15,7 @@
         <div class="panel-body">
             <table width="100%">
                 <tr><td class="a_label">Name</td> <td>{{ application.lastname }}, {{ application.firstname }}</td></tr>
+                <tr><td class="a_label">Status</td> <td><span style="background-color: {{ application.status | statuscolor }}">{{ application.status }} - {{ application.status | statuslabel }}</span></td></tr>
                 <tr><td class="a_label">Email</td> <td>{{ application.email | emlink }}</td></tr>
 
                 <tr><td class="a_label">Birth</td>
@@ -67,6 +68,29 @@
             </table>
         </div>
     </div>
+
+     <div class="panel panel-primary">
+        <div class="panel-heading"><h3 class="panel-title">Notes</h3></div>
+        <div class="panel-body">
+            <form action="/show-application.html?id={{ application.id }}" method="post">
+                <table width="100%">
+                    <tr><td class="a_label">Status</td> <td> {{ form.status() }}</td></tr>
+                    <tr><td class="a_label">&nbsp;</td> <td> &nbsp; </td></tr>
+
+                    <tr><td class="a_label">Comments</td> <td> {{ form.comments(cols="120", rows="10") }}</td></tr>
+                    <tr><td class="a_label">&nbsp;</td> <td> &nbsp; </td></tr>
+
+                    <tr><td class="a_label">Delete</td> <td> {{ form.delete() }}</td></tr>
+                    <tr><td class="a_label">&nbsp;</td> <td> &nbsp; </td></tr>
+
+                    <tr><td class="a_label"></td>
+                        <td>{{ m.sub("update", "Update Notes", "btn btn-primary") }}
+                            {{ m.sub("update_and_return", "&#8679; Update Notes and Return", "btn btn-primary") }}
+                    </td></tr>
+                </table>
+            </form>
+        </div>
+     </div>
 
 
 </div>

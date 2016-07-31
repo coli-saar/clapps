@@ -1,4 +1,5 @@
 import os
+import re
 
 from flask import Flask
 import time
@@ -49,8 +50,17 @@ from tables import Country
 countries = {country.id: country for country in session.query(Country).all()}
 country_list = [(c.code, c.name_en) for id, c in sorted(countries.items(), key=lambda x:x[0])]
 
+# retrieve statuses
+status_items = conf.items("status")
+status_colors = {}
+status_labels = {}
+for id, value in status_items:
+    id = int(id)
+    label, color = re.split("\s*,\s*", value)
+    status_colors[id] = color
+    status_labels[id] = label
 
-
+status_choices = [(str(id), "%d - %s" % (id, status_labels[id])) for id in sorted(status_labels.keys())]
 
 @app.template_filter("ft")
 @evalcontextfilter
@@ -80,3 +90,13 @@ def flaglink(eval_ctx, countrycode):
 @evalcontextfilter
 def emlink(eval_ctx, address):
     return Markup("<img src='img/envelope.png' height='12px' /> <a href='mailto:%s'>%s</a>" % (address, address))
+
+@app.template_filter("statuscolor")
+@evalcontextfilter
+def statuscolor(eval_ctx, status):
+    return status_colors[status]
+
+@app.template_filter("statuslabel")
+@evalcontextfilter
+def statuslabel(eval_ctx, status):
+    return status_labels[status]

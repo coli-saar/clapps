@@ -13,7 +13,7 @@
 {%- endmacro %}
 
 {% macro sub(name, label, class) -%}
-<input id={{ name }} name={{ name }} value={{ label }} type="submit" class='{{ class }}' />
+<input id={{ name }} name={{ name }} value="{{ label | safe }}" type="submit" class='{{ class }}' />
 {%- endmacro %}
 
 {% macro sel(name, selectedItem, values) -%}
