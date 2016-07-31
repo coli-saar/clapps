@@ -3,9 +3,25 @@
     margin:10px;
 }
 
+.footer {
+    margin-left: 10px;
+    border-top: solid #ccc 1px;
+}
+
+.floatright {
+    float: right;
+    clear: right;
+}
+
 
 
 /* applicant detail page */
+
+.statuslabel {
+    border: solid 1px black;
+    padding-right: 3px;
+    padding-left: 3px;
+}
 
 .a_table {
     float:left;

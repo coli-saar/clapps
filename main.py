@@ -3,9 +3,13 @@ from time import gmtime, strftime, localtime
 import os
 import traceback
 
+import flask
 from flask import render_template
+from flask_login import login_required, login_user, logout_user
+from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename, redirect
 from wtforms.fields.core import BooleanField, DateTimeField
+from wtforms.fields.simple import HiddenField
 from wtforms.validators import ValidationError
 from flask import request, flash
 
@@ -16,7 +20,7 @@ from tornado.ioloop import IOLoop
 from init import *
 
 from wtforms import Form, StringField, validators, SelectField, IntegerField, TextAreaField, BooleanField, FileField, \
-    TextField
+    TextField, PasswordField
 from tables import *
 
 import mail
@@ -136,6 +140,7 @@ class ApplicationForm(Form):
 #######################################################################################
 
 @app.route("/show-applications.html", methods=["GET",])
+@login_required
 def show_applications():
 
     # TODO - authentication
@@ -145,6 +150,7 @@ def show_applications():
 
 
 @app.route("/show-application.html", methods=["GET",])
+@login_required
 def show_application():
     # TODO - authentication
     # TODO - check that ID is defined and an int
@@ -154,6 +160,7 @@ def show_application():
     return render_template("show-application.html", application=application, form=ShowApplicationForm(status=application.status, comments=application.comments))
 
 @app.route("/show-application.html", methods=["POST",])
+@login_required
 def update_notes():
     # TODO - authentication
     id = int(request.args.get('id'))
@@ -188,6 +195,60 @@ class ShowApplicationForm(Form):
     status = SelectField("Change Status", choices=status_choices)
     comments = TextAreaField('Notes')
     delete = StringField("Delete")
+
+
+
+#######################################################################################
+## authentication
+#######################################################################################
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "/login"
+login_manager.login_message = None
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users[user_id]
+
+
+@app.route('/login', methods=['GET',])
+def unauthorized():
+    # flask-login gave us a "next" argument when it first called us;
+    # after that, we hide it in a hidden field
+    form = LoginForm(request.form, next=request.args.get("next"))
+    return render_template('login.html', form=form)
+
+
+@app.route('/login', methods=['POST',])
+def do_unauthorized():
+    form = LoginForm(request.form)
+
+    if form.validate():
+        user = None
+        for key, value in users.items():
+            if form.name.data == value.id and form.passwd.data == value.passwd:
+                user = value
+                break
+
+        if user:
+            login_user(user)
+            return redirect(form.next.data)
+        
+    return render_template('login.html', form=form)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+class LoginForm(Form):
+    name = StringField("User name", validators=[validators.InputRequired()])
+    passwd = PasswordField("Password", validators=[validators.InputRequired()])
+    next = HiddenField("next")
+
 
 
 #######################################################################################

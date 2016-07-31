@@ -40,7 +40,18 @@
 </div>
 {%- endmacro %}
 
-
+{# display all flashed messages #}
+{% macro process_flash() -%}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message is not none %}
+                <hr/> <p class="text-danger"> {{ message }} </p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{%- endmacro %}
 
 
 {# display WTF field #}

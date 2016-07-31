@@ -4,6 +4,7 @@ import re
 from flask import Flask
 import time
 
+from flask_login import LoginManager
 from jinja2 import evalcontextfilter
 from markupsafe import Markup
 from sqlalchemy import create_engine
@@ -15,6 +16,7 @@ from flask_sqlalchemy_session import flask_scoped_session
 
 import configparser
 
+from user import User
 
 conf = configparser.ConfigParser({  }) # pass default values in dictionary
 conf.read("clapps.conf")
@@ -44,6 +46,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logger.info("Started at %s" % str(start_time))
+
+# initialize list of users who can log in
+users = {}
+for id, value in conf.items("users"):
+    name, passwd = re.split("\s*,\s*", value)
+    users[id] = User(id, name, passwd)
+
 
 # retrieve list of countries
 from tables import Country

@@ -12,13 +12,7 @@
 <form class="form-horizontal col-md-8" action="{{ conf.get('server', 'path') }}" method="post" enctype="multipart/form-data">
     <h1>{{ title }}</h1>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <hr/> <p class="text-danger"> {{ message }} </p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+    {{ m.process_flash() }}
 
     &nbsp;<br/>
      <blockquote style="font-size: inherit">

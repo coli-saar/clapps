@@ -7,7 +7,14 @@
 {% block content %}
 
 <div class="content">
-    <h1>{{ application.firstname }} {{ application.lastname }} <span style="float: right; clear: right"><a href="/show-applications.html">&#8679;</a></span></h1>
+    <h1>{{ application.firstname }} {{ application.lastname }}
+        <span class="floatright">
+            <a href="/show-applications.html">&#8679;</a>
+            {% if current_user.is_authenticated %}
+            <a href="/logout">&#x2205;</a>
+            {% endif %}
+        </span>
+    </h1>
 
 
     <div class="panel panel-primary">
@@ -15,7 +22,7 @@
         <div class="panel-body">
             <table width="100%">
                 <tr><td class="a_label">Name</td> <td>{{ application.lastname }}, {{ application.firstname }}</td></tr>
-                <tr><td class="a_label">Status</td> <td><span style="background-color: {{ application.status | statuscolor }}">{{ application.status }} - {{ application.status | statuslabel }}</span></td></tr>
+                <tr><td class="a_label">Status</td> <td><span class="statuslabel" style="background-color: {{ application.status | statuscolor }}">{{ application.status }} - {{ application.status | statuslabel }}</span></td></tr>
                 <tr><td class="a_label">Email</td> <td>{{ application.email | emlink }}</td></tr>
 
                 <tr><td class="a_label">Birth</td>
