@@ -1,0 +1,25 @@
+{% set title = application.lastname + ", " + application.firstname + " - Application" %}
+
+{% extends "main.html" %}
+{% import "macros.html" as m %}
+
+
+{% block content %}
+
+<div class="content">
+    <h1>{{ title }}</h1>
+
+    <table>
+        <tr> <td class="a_header">Applicant</td> <td/> </tr>
+
+        <tr><td class="a_label">Name</td> <td>{{ application.lastname }}, {{ application.firstname }}</td></tr>
+        <tr><td class="a_label">Nationality</td> <td>{{ application.nationality }}</td></tr>
+        <tr><td class="a_label">Birthday</td> <td>{{ application.birthday | ft }}</td></tr>
+        <tr><td class="a_label">Affiliation</td> <td>{{ application.affiliation }}, </td></tr>
+
+
+    </table>
+
+</div>
+
+{% endblock %}

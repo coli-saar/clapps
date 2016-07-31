@@ -25,6 +25,8 @@ class Application(Base):
     aff_city = Column(String(200))
     aff_country = Column(String(2), ForeignKey('countries.code'))
 
+    # s_nationality = relationship("Country", foreign_keys="nationality")
+
 
 class Country(Base):
     __tablename__ = 'countries'

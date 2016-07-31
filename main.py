@@ -68,8 +68,7 @@ def post_application():
             session.commit()
 
             # store uploaded CV
-            filename = secure_filename("%d-%s.pdf" % (id, form.lastname.data))
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file_path = cv_filename_from_data(id, form.lastname.data)
             remote_cv_file.save(file_path)
 
             # notify contact person
@@ -138,11 +137,23 @@ class ApplicationForm(Form):
 
 @app.route("/show-applications.html", methods=["GET",])
 def show_applications():
+
+    # TODO - authentication
+
     applications = session.query(Application).all()
-
-    print(applications[0].degrees)
-
     return render_template("show-applications.html", conf=conf, applications=applications)
+
+
+@app.route("/show-application.html", methods=["GET",])
+def show_application():
+    # TODO - authentication
+    # TODO - check that ID is defined and an int
+
+    id = int(request.args.get('id'))
+    application = session.query(Application).filter(Application.id == id).first()
+    return render_template("show-application.html", application=application)
+
+
 
 
 

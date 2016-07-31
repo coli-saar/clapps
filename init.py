@@ -1,9 +1,13 @@
+import os
+
 from flask import Flask
 import time
 
 from jinja2 import evalcontextfilter
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from werkzeug.utils import secure_filename
+
 from tables import Base
 from flask_sqlalchemy_session import flask_scoped_session
 
@@ -52,3 +56,14 @@ country_list = [(c.code, c.name_en) for id, c in sorted(countries.items(), key=l
 def ft(eval_ctx, value):
     t = value.timetuple()
     return time.strftime("%d/%m/%y", t)
+
+
+def cv_filename_from_data(id, lastname):
+    filename = secure_filename("%d-%s.pdf" % (id, lastname))
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    return file_path
+
+@app.template_filter("cv_filename")
+@evalcontextfilter
+def cv_filename(eval_ctx, application):
+    return cv_filename_from_data(application.id, application.lastname)
