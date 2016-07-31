@@ -5,7 +5,26 @@
 
 
 
-/* tooltips */
+/* applicant detail page */
+
+.a_table {
+    float:left;
+    table-layout:fixed;
+}
+
+.a_header {
+    font-size: large;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.a_label {
+    width: 10em;
+}
+
+
+/* tooltips  - not working */
 
 .tooltip{
     display: inline;

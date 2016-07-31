@@ -4,6 +4,7 @@ from flask import Flask
 import time
 
 from jinja2 import evalcontextfilter
+from markupsafe import Markup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from werkzeug.utils import secure_filename
@@ -67,3 +68,15 @@ def cv_filename_from_data(id, lastname):
 @evalcontextfilter
 def cv_filename(eval_ctx, application):
     return cv_filename_from_data(application.id, application.lastname)
+
+
+@app.template_filter("flaglink")
+@evalcontextfilter
+def flaglink(eval_ctx, countrycode):
+    url = "img/famfamfam_flags/%s.gif" % countrycode.lower()
+    return Markup('<img src="%s" alt="%s"/>' % (url, countrycode))
+
+@app.template_filter("emlink")
+@evalcontextfilter
+def emlink(eval_ctx, address):
+    return Markup("<img src='img/envelope.png' height='12px' /> <a href='mailto:%s'>%s</a>" % (address, address))
