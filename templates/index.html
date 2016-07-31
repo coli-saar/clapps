@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div style="margin:10px">
+<div class="content">
 
 
 <form class="form-horizontal col-md-8" action="{{ conf.get('server', 'path') }}" method="post" enctype="multipart/form-data">
@@ -20,7 +20,9 @@
     {% endif %}
 {% endwith %}
 
-    <p>&nbsp;<br/>
+    &nbsp;<br/>
+     <blockquote style="font-size: inherit">
+    <p>
         Welcome to the job applications system of the <a href="http://www.coli.uni-saarland.de/">Department of Computational Linguistics
         and Phonetics</a> at <a href="http://www.uni-saarland.de/">Saarland University</a>.</p>
 
@@ -30,8 +32,8 @@
 </blockquote>
     </p>
 
-    <p>Please enter the following information so we can process your application easily. Thank you!
-        <br/><br/>&nbsp;</p>
+    <p>Please enter the following information so we can process your application easily. Thank you!</p>
+</blockquote>
 
 
 
