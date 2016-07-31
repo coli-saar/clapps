@@ -1,5 +1,7 @@
 from flask import Flask
 import time
+
+from jinja2 import evalcontextfilter
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from tables import Base
@@ -41,3 +43,12 @@ logger.info("Started at %s" % str(start_time))
 from tables import Country
 countries = {country.id: country for country in session.query(Country).all()}
 country_list = [(c.code, c.name_en) for id, c in sorted(countries.items(), key=lambda x:x[0])]
+
+
+
+
+@app.template_filter("ft")
+@evalcontextfilter
+def ft(eval_ctx, value):
+    t = value.timetuple()
+    return time.strftime("%d/%m/%y", t)

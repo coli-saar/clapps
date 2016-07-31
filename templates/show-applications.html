@@ -1,10 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% set title = conf.get("application", "code") + " - Applications Overview" %}
 
-</body>
-</html>
+{% extends "main.html" %}
+{% import "macros.html" as m %}
+
+
+{% block content %}
+
+<div class="content">
+
+    <h1>{{ title }}</h1>
+
+    <table id="applications" class="display table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Time</th>
+            <th>Name</th>
+            <th>Level</th>
+            <th>Affiliation</th>
+            <th>Degree</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.id }}</td>
+            <td>{{ app.application_time | ft }}</td>
+            <td>
+                <a href="mailto:{{ app.email }}" title="{{ app.email }}" ><img src="img/envelope.png" height="12px" /></a>
+                <a href="{{ conf.get('server', 'upload_dir') }}/{{ app.id }}-{{ app.lastname }}.pdf"> <img src="img/file.png" height="12px"/> </a>
+
+                {{ app.lastname }}, {{ app.firstname }}</td>
+            <td>{{ app.level }}</td>
+            <td>{{ app.affiliation }} ({{ app.aff_country }})  </td>
+            <td>
+                {% for deg in app.degrees %}
+                {{ deg.degree }}, {{ deg.university }} ({{ deg.country }}), {{ deg.year }}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+<script type="text/javascript" class="init">
+    $(document).ready(function(){
+    $('#applications').DataTable({
+      "paging": false,
+      "dom": "ft"
+     });
+});
+</script>
+
+{% endblock %}
