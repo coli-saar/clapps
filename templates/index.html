@@ -6,19 +6,23 @@
 
 {% block content %}
 
-<div class="content">
+<div style="margin:10px">
 
 
 <form class="form-horizontal col-md-8" action="{{ conf.get('server', 'path') }}" method="post" enctype="multipart/form-data">
     <h1>{{ title }}</h1>
 
-    {{ m.process_flash() }}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <hr/> <p class="text-danger"> {{ message }} </p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
-    &nbsp;<br/>
-     <blockquote style="font-size: inherit">
-    <p>
-        Welcome to the job applications system of the <a href="http://www.coli.uni-saarland.de/">Department of Computational Linguistics
-        and Phonetics</a> at <a href="http://www.uni-saarland.de/">Saarland University</a>.</p>
+    <p>&nbsp;<br/>
+        Welcome to the job applications system of the <a href="http://www.coli.uni-saarland.de/index.php?lang=en">Department of Computational Linguistics
+        and Phonetics</a> at <a href="http://www.uni-saarland.de/en/home.html">Saarland University</a>.</p>
 
     <p>On this page, you can submit your application for the following job opening:
         <blockquote style="font-size: inherit"><strong>{{ conf.get("application", "code") }}</strong>:
@@ -26,8 +30,8 @@
 </blockquote>
     </p>
 
-    <p>Please enter the following information so we can process your application easily. Thank you!</p>
-</blockquote>
+    <p>Please enter the following information so we can process your application easily. Thank you!
+        <br/><br/>&nbsp;</p>
 
 
 

@@ -9,9 +9,9 @@
 <div class="content">
     <h1>{{ application.firstname }} {{ application.lastname }}
         <span class="floatright">
-            <a href="/show-applications.html">&#8679;</a>
+            <a href="show-applications.html">&#8679;</a>
             {% if current_user.is_authenticated %}
-            <a href="/logout">&#x2205;</a>
+            <a href="logout">&#x2205;</a>
             {% endif %}
         </span>
     </h1>
@@ -79,7 +79,7 @@
      <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Notes</h3></div>
         <div class="panel-body">
-            <form action="/show-application.html?id={{ application.id }}" method="post">
+            <form action="show-application.html?id={{ application.id }}" method="post">
                 <table width="100%">
                     <tr><td class="a_label">Status</td> <td> {{ form.status() }}</td></tr>
                     <tr><td class="a_label">&nbsp;</td> <td> &nbsp; </td></tr>

@@ -202,9 +202,10 @@ class ShowApplicationForm(Form):
 ## authentication
 #######################################################################################
 
+baseurl = conf.get("server", "path")
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "/login"
+login_manager.login_view = baseurl + "login"
 login_manager.login_message = None
 
 @login_manager.user_loader
@@ -217,7 +218,7 @@ def unauthorized():
     # flask-login gave us a "next" argument when it first called us;
     # after that, we hide it in a hidden field
     form = LoginForm(request.form, next=request.args.get("next"))
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, baseurl=baseurl)
 
 
 @app.route('/login', methods=['POST',])
@@ -233,9 +234,9 @@ def do_unauthorized():
 
         if user:
             login_user(user)
-            return redirect(form.next.data)
+            return redirect(baseurl + form.next.data[1:]) # strip leading /
         
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, baseurl=baseurl)
 
 
 @app.route("/logout")
