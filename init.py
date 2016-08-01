@@ -103,9 +103,9 @@ def emlink(eval_ctx, address):
 @app.template_filter("statuscolor")
 @evalcontextfilter
 def statuscolor(eval_ctx, status):
-    return status_colors[status]
+    return status_colors.get(status, "white")
 
 @app.template_filter("statuslabel")
 @evalcontextfilter
 def statuslabel(eval_ctx, status):
-    return status_labels[status]
+    return status_labels.get(status, "(undef)")

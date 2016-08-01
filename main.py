@@ -51,7 +51,7 @@ def post_application():
                               level=form.level.data,
                               nationality=form.nationality.data, email=form.email.data,
                               affiliation=form.affiliation.data, aff_city=form.aff_city.data,
-                              aff_country=form.aff_country.data)
+                              aff_country=form.aff_country.data, status=0)
 
         try:
             # store all data from application form
@@ -187,7 +187,7 @@ def update_notes():
             session.commit()
 
     if return_to_overview_page:
-        return redirect("/show-applications.html", code=302)
+        return redirect(baseurl + "show-applications.html", code=302)
     else:
         return render_template("show-application.html", application=application, form=form)
 
@@ -243,7 +243,7 @@ def do_unauthorized():
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
+    return redirect(baseurl)
 
 class LoginForm(Form):
     name = StringField("User name", validators=[validators.InputRequired()])
