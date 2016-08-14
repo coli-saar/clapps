@@ -33,7 +33,7 @@ app.config['UPLOAD_FOLDER'] = conf.get("server", "upload_dir")
 
 # set up database connection
 db_url = conf.get("database", "url")
-engine = create_engine(db_url)
+engine = create_engine(db_url, pool_recycle=3600) # refresh DB connections every hour
 
 # flask-mysqlalchemy integration
 Base.metadata.bind = engine
