@@ -14,6 +14,7 @@ class Application(Base):
     __tablename__ = 'applications'
 
     id = Column(Integer, primary_key=True)
+    code = Column(String(100))
     firstname = Column(String(200))
     lastname = Column(String(200))
     birthday = Column(DateTime)

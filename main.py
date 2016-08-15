@@ -32,6 +32,7 @@ def index():
 
 @app.route("/", methods=["POST",])
 def post_application():
+    code = conf.get("application", "code")
     form = ApplicationForm(request.form)
 
     if form.validate():
@@ -48,7 +49,7 @@ def post_application():
         # disability = 1 if form.disability.data else 0
         new_app = Application(firstname=form.firstname.data, lastname=form.lastname.data,
                               birthday=form.birthday.data, application_time=datetime.datetime.now(),
-                              level=form.level.data,
+                              level=form.level.data, code=code,
                               nationality=form.nationality.data, email=form.email.data,
                               affiliation=form.affiliation.data, aff_city=form.aff_city.data,
                               aff_country=form.aff_country.data, status=0)
@@ -142,7 +143,8 @@ class ApplicationForm(Form):
 @app.route("/show-applications.html", methods=["GET",])
 @login_required
 def show_applications():
-    applications = session.query(Application).all()
+    code = conf.get("application", "code")
+    applications = session.query(Application).filter(Application.code == code).all()
     return render_template("show-applications.html", conf=conf, applications=applications, baseurl=baseurl)
 
 
@@ -195,11 +197,7 @@ class ShowApplicationForm(Form):
 baseurl = conf.get("server", "path")
 login_manager = LoginManager()
 login_manager.init_app(app)
-<<<<<<< local
-login_manager.login_view =  "login"
-=======
 login_manager.login_view = baseurl + "login"
->>>>>>> other
 login_manager.login_message = None
 
 @login_manager.user_loader
@@ -209,15 +207,9 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET',])
 def unauthorized():
-<<<<<<< local
     # flask-login gave us a "next" argument in GET /login;
     # after that, we hide it in a hidden field so the POST requests can see it too
     form = LoginForm(request.form, next=baseurl + request.args.get("next")[1:])
-=======
-    # flask-login gave us a "next" argument when it first called us;
-    # after that, we hide it in a hidden field
-    form = LoginForm(request.form, next=request.args.get("next"))
->>>>>>> other
     return render_template('login.html', form=form, baseurl=baseurl)
 
 
