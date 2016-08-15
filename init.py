@@ -69,6 +69,16 @@ for id, value in status_items:
     status_colors[id] = color
     status_labels[id] = label
 
+# initialize file upload path
+upload_dir = conf.get("server", "upload_dir")
+
+if os.path.isabs(upload_dir):
+    fs_upload_dir = upload_dir
+else:
+    fs_upload_dir = os.path.abspath(upload_dir)
+
+
+
 status_choices = [(str(id), "%d - %s" % (id, status_labels[id])) for id in sorted(status_labels.keys())]
 
 @app.template_filter("ft")

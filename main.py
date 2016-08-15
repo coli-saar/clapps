@@ -189,13 +189,10 @@ class ShowApplicationForm(Form):
     delete = StringField("Delete")
 
 
-upload_dir = conf.get("server", "upload_dir")
-
 @app.route('/' + upload_dir + '/<path:path>')
 @login_required
 def send_cv(path):
-    dir = "%s/%s" % (os.getcwd(), upload_dir)
-    return send_from_directory(dir, path)
+    return send_from_directory(fs_upload_dir, path)
 
 
 
