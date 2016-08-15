@@ -4,7 +4,7 @@ import os
 import traceback
 
 import flask
-from flask import render_template
+from flask import render_template, send_from_directory
 from flask_login import login_required, login_user, logout_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename, redirect
@@ -187,6 +187,14 @@ class ShowApplicationForm(Form):
     status = SelectField("Change Status", choices=status_choices)
     comments = TextAreaField('Notes')
     delete = StringField("Delete")
+
+
+upload_dir = conf.get("server", "upload_dir")
+
+@app.route('/' + upload_dir + '/<path:path>')
+@login_required
+def send_cv(path):
+    return send_from_directory(upload_dir, path)
 
 
 
