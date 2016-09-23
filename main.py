@@ -136,6 +136,30 @@ class ApplicationForm(Form):
     lor2_affiliation = StringField("Affiliation", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the affiliation of reference #2"})
 
 
+
+#######################################################################################
+## helpers
+#######################################################################################
+
+@app.route("/ids2emails.html")
+@login_required
+def ids_to_emails():
+    ids_string = request.args.get("ids")
+
+    if ids_string:
+        ids = ids_string.split(",")
+
+        emails = []
+        for id in ids:
+            appl = session.query(Application).filter(Application.id == id).first()
+            emails.append(appl.email)
+
+        return ",".join(emails)
+    else:
+        return "(no selection)"
+
+
+
 #######################################################################################
 ## admin access
 #######################################################################################
@@ -146,6 +170,13 @@ def show_applications():
     code = conf.get("application", "code")
     applications = session.query(Application).filter(Application.code == code).all()
     return render_template("show-applications.html", conf=conf, applications=applications, baseurl=baseurl)
+
+@app.route("/action-applications.html", methods=["GET",])
+@login_required
+def action_applications():
+    code = conf.get("application", "code")
+    applications = session.query(Application).filter(Application.code == code).all()
+    return render_template("action-applications.html", conf=conf, applications=applications, baseurl=baseurl)
 
 
 @app.route("/show-application.html", methods=["GET",])
@@ -193,7 +224,6 @@ class ShowApplicationForm(Form):
 @login_required
 def send_cv(path):
     return send_from_directory(fs_upload_dir, path)
-
 
 
 #######################################################################################

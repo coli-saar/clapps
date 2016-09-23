@@ -1,0 +1,120 @@
+{% set title = conf.get("application", "code") + " - Applications Overview" %}
+
+{% extends "main.html" %}
+{% import "macros.html" as m %}
+
+
+{% block content %}
+
+<div class="content">
+
+    <h1>{{ title }}
+
+        <span class="floatright">
+            {% if current_user.is_authenticated %}
+            <a href="logout">&#x2205;</a>
+            {% endif %}
+        </span>
+
+    </h1>
+
+    {{ m.process_flash() }}
+
+    <table id="applications" class="display table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th width="20%">Name</th>
+            <th width="8%">Level</th>
+            <th>Affiliation</th>
+            <th>Degree</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for app in applications %}
+        <tr bgcolor="{{ app.status | statuscolor }}">
+            <td></td>
+            <td>{{ app.id }}</td>
+            <td>{{ app.application_time | ft }}</td>
+            <td>{{ app.status }} - {{ app.status | statuslabel }}</td>
+            <td>
+                <a href="{{ app | cv_filename }}"> <img src="img/file.png" height="12px"/> </a>
+
+                <a href="show-application.html?id={{ app.id }}">{{ app.lastname }}, {{ app.firstname }}</a></td>
+            <td>{{ app.level }}</td>
+            <td>{{ app.affiliation }} ({{ app.aff_country }})  </td>
+            <td>
+                {% for deg in app.degrees %}
+                {{ deg.degree }}, {{ deg.university }} ({{ deg.country }}), {{ deg.year }}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <hr/>
+
+    <div><button id="copy-email" name="copy-email" class="btn btn-primary" onclick="copy_email()">Copy email</button><br/>&nbsp;</div>
+    <div>
+    <button id="copy-email" name="copy-email" type="submit" class="btn btn-primary">another one</button></div>
+
+</div>
+
+
+<script type="text/javascript" class="init">
+    $(document).ready(function(){
+    table = $('#applications').DataTable({
+      "paging": false,
+      "dom": "ft",
+      columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]]
+     });
+});
+
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
+
+function copyToClipboard(text) {
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+}
+
+function copy_email() {
+  console.log("ce");
+  var buffer = [];
+
+  table.rows({selected:true}).every(function ( rowIdx, tableLoop, rowLoop ) {
+    var data = this.data();
+    buffer.push(data[1]); // collect IDs
+   } );
+
+   console.log(buffer.join());
+   httpGetAsync("ids2emails.html?ids=" + buffer.join(), function(result) {
+      copyToClipboard(result);
+   });
+}
+</script>
+
+
+
+{% endblock %}
