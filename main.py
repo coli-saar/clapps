@@ -158,6 +158,35 @@ def ids_to_emails():
     else:
         return "(no selection)"
 
+@app.route("/addcomment")
+@login_required
+def bulk_add_comment():
+    ids_string = request.args.get("ids")
+
+    if not ids_string:
+        return "(no selection)"
+
+    else:
+        comment = request.args.get("comment")
+
+        if not comment:
+            return "(no comment specified)"
+
+        else:
+            ids = ids_string.split(",")
+            timestr = strftime("%Y-%m-%d %H:%M:%S")
+
+            for id in ids:
+                appl = session.query(Application).filter(Application.id == id).first()
+                old_comment = appl.comments
+
+                if old_comment:
+                    appl.comments = "(bulk %s) %s\n\n%s" % (timestr, comment, old_comment)
+                else:
+                    appl.comments = "(bulk %s) %s" % (timestr, comment)
+
+            session.commit()
+            return "Comment added to selected applications."
 
 
 #######################################################################################

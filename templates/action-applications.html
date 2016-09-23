@@ -59,9 +59,12 @@
 
     <hr/>
 
-    <div><button id="copy-email" name="copy-email" class="btn btn-primary" onclick="copy_email()">Copy email</button><br/>&nbsp;</div>
-    <div>
-    <button id="copy-email" name="copy-email" type="submit" class="btn btn-primary">another one</button></div>
+    <div class="action_button"><button id="copy-email" name="copy-email" class="btn btn-primary" onclick="copy_email()">Copy email</button></div>
+
+    <div class="action_button">
+        <button id="add-comment" name="add-comment" type="submit" class="btn btn-primary" onclick="add_comment()">Add comment to all selected:</button>
+        <input type="text" size="80" id="added-comment" name="added-comment"/>
+    </div>
 
 </div>
 
@@ -99,8 +102,8 @@ function copyToClipboard(text) {
     window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
 
-function copy_email() {
-  console.log("ce");
+// return IDs of selected rows as comma-separated string
+function get_selected_ids() {
   var buffer = [];
 
   table.rows({selected:true}).every(function ( rowIdx, tableLoop, rowLoop ) {
@@ -108,11 +111,25 @@ function copy_email() {
     buffer.push(data[1]); // collect IDs
    } );
 
-   console.log(buffer.join());
-   httpGetAsync("ids2emails.html?ids=" + buffer.join(), function(result) {
+  return buffer.join();
+}
+
+function copy_email() {
+   ids = get_selected_ids();
+   httpGetAsync("ids2emails.html?ids=" + ids, function(result) {
       copyToClipboard(result);
    });
 }
+
+function add_comment() {
+  ids = get_selected_ids();
+  comment = $("#added-comment").val();
+
+  httpGetAsync("addcomment?ids=" + ids + "&comment=" + comment, function(result) {
+      alert("Comment added.");
+   });
+}
+
 </script>
 
 
