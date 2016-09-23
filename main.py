@@ -188,6 +188,22 @@ def bulk_add_comment():
             session.commit()
             return "Comment added to selected applications."
 
+@app.route("/bulkdelete")
+@login_required
+def bulk_delete():
+    ids_string = request.args.get("ids")
+
+    if not ids_string:
+        return "(no selection)"
+
+    else:
+        ids = ids_string.split(",")
+
+        for id in ids:
+            session.query(Application).filter(Application.id == id).delete()
+
+        session.commit()
+        return "Deleted %d applications." % len(ids)
 
 #######################################################################################
 ## admin access

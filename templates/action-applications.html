@@ -66,6 +66,11 @@
         <input type="text" size="80" id="added-comment" name="added-comment"/>
     </div>
 
+    <div class="action_button">
+        <button id="delete" name="delete" class="btn btn-primary" onclick="bulk_delete()">Delete all selected:</button>
+        <input type="text" size="80" id="bdelete" name="bdelete"/>
+    </div>
+
 </div>
 
 
@@ -126,8 +131,21 @@ function add_comment() {
   comment = $("#added-comment").val();
 
   httpGetAsync("addcomment?ids=" + ids + "&comment=" + comment, function(result) {
-      alert("Comment added.");
+      alert(result);
    });
+}
+
+function bulk_delete() {
+  ids = get_selected_ids();
+  confirm = $("#bdelete").val();
+
+  if( confirm == "Delete!") {
+    httpGetAsync("bulkdelete?ids=" + ids, function(result) {
+      alert(result);
+    });
+  } else {
+    alert("Type 'Delete!' in the text field to confirm bulk deletion.");
+  }
 }
 
 </script>
