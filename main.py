@@ -52,7 +52,7 @@ def post_application():
                               level=form.level.data, code=code,
                               nationality=form.nationality.data, email=form.email.data,
                               affiliation=form.affiliation.data, aff_city=form.aff_city.data,
-                              aff_country=form.aff_country.data, status=0)
+                              aff_country=form.aff_country.data, source=form.source.data, status=0)
 
         try:
             # store all data from application form
@@ -135,6 +135,7 @@ class ApplicationForm(Form):
     lor2_email = StringField("Email", validators=[validators.InputRequired(), validators.Email()], render_kw={"placeholder": "Enter the email address of reference #2"})
     lor2_affiliation = StringField("Affiliation", validators=[validators.InputRequired()], render_kw={"placeholder": "Enter the affiliation of reference #2"})
 
+    source = StringField("Source", render_kw={"placeholder": "Where did you find this job ad (optional)?"})
 
 
 #######################################################################################

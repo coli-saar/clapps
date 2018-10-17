@@ -28,6 +28,7 @@ class Application(Base):
     aff_country = Column(String(2), ForeignKey('countries.code'))
     status = Column(Integer)
     comments = Column(Text)
+    source = Column(Text)
 
     s_nationality = relationship("Country", foreign_keys=[nationality])
     s_aff_country = relationship("Country", foreign_keys=[aff_country])

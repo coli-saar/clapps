@@ -21,8 +21,7 @@
 {% endwith %}
 
     <p>&nbsp;<br/>
-        Welcome to the job applications system of the <a href="http://www.coli.uni-saarland.de/index.php?lang=en">Department of Computational Linguistics
-        and Phonetics</a> at <a href="http://www.uni-saarland.de/en/home.html">Saarland University</a>.</p>
+        Welcome to the job applications system of the <a href="{{ conf.get('department', 'url') }}">{{ conf.get('department', 'name') }}</a> at <a href="{{ conf.get('department', 'uni_url') }}">{{ conf.get('department', 'uni') }}</a>.</p>
 
     <p>On this page, you can submit your application for the following job opening:
         <blockquote style="font-size: inherit"><strong>{{ conf.get("application", "code") }}</strong>:
@@ -30,7 +29,9 @@
 </blockquote>
     </p>
 
-    <p>Please enter the following information so we can process your application easily. Thank you!
+  <p>Please enter the following information so we can process your application easily. Thank you!</p>
+
+  <p>Your information will be held in strict confidence, and will be deleted after the applications have been processed.
         <br/><br/>&nbsp;</p>
 
 
@@ -38,8 +39,8 @@
     <div class="panel panel-primary">
         <div class="panel-heading"><h3 class="panel-title">Information about yourself</h3></div>
         <div class="panel-body">
-            {{ m.swtf(form.lastname) }}
             {{ m.swtf(form.firstname) }}
+            {{ m.swtf(form.lastname) }}
             {{ m.swtf(form.email) }}
             {{ m.swtf(form.level) }}
             {{ m.swtf(form.birthday) }}
@@ -110,6 +111,15 @@
             {{ m.swtf(form.lor2_affiliation) }}
             {# {{ m.swtf(form.lor2_city) }}
             {{ m.swtf(form.lor2_country) }} #}
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading"><h3 class="panel-title">Job ad</h3></div>    
+        <div class="panel-body">
+      <p>Would you let us know where you found this job ad (e.g. Corpora list, Linguist List, etc.)?
+      This is optional, but would help us with future job ads. Thanks!</p>
+            {{ m.swtf(form.source) }}
         </div>
     </div>
 
