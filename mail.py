@@ -4,6 +4,7 @@ from flask import render_template
 
 def send(id, recipient, subject, message):
     msg = render_template("email.txt", sender=clapps_contact, recipient=recipient, subject=subject, body=message)
+    msg = msg.encode('utf8')
     auth = conf.get("email", "user", fallback=False)
 
     try:
