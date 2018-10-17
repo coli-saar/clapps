@@ -40,10 +40,12 @@ def post_application():
 
         if remote_cv_file.filename == '':
             form.cv_file.errors.append("Please specify a PDF file which contains your CV.")
+            flash("Some of the data you entered was invalid. Please see the error messages below.")
             return render_template("index.html", form=form, conf=conf)
 
         elif not allowed_file(remote_cv_file.filename):
             form.cv_file.errors.append("File must be of one of these types: " + " ".join(ALLOWED_EXTENSIONS))
+            flash("Some of the data you entered was invalid. Please see the error messages below.")
             return render_template("index.html", form=form, conf=conf)
 
         # disability = 1 if form.disability.data else 0
@@ -94,7 +96,7 @@ def post_application():
             return render_template("index.html", form=form, conf=conf)
 
     else:
-        print("validation")
+        flash("Some of the data you entered was invalid. Please see the error messages below.")
         return render_template("index.html", form=form, conf=conf)
 
 
