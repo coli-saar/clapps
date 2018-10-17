@@ -89,8 +89,14 @@ def ft(eval_ctx, value):
 
 
 def cv_filename_from_data(id, lastname):
+    dir = app.config['UPLOAD_FOLDER']
+
+    # create CVs directory if it doesn't exist
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    
     filename = secure_filename("%d-%s.pdf" % (id, lastname))
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file_path = os.path.join(dir, filename)
     return file_path
 
 @app.template_filter("cv_filename")
