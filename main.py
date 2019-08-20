@@ -293,7 +293,7 @@ def load_user(user_id):
 def unauthorized():
     # flask-login gave us a "next" argument in GET /login;
     # after that, we hide it in a hidden field so the POST requests can see it too
-    form = LoginForm(request.form, next=baseurl + request.args.get("next")[1:])
+    form = LoginForm(request.form, next=request.args.get("next")) # next=baseurl + request.args.get("next")[1:])
     return render_template('login.html', form=form, baseurl=baseurl)
 
 
@@ -310,7 +310,8 @@ def do_unauthorized():
 
         if user:
             login_user(user)
-            return redirect(baseurl + form.next.data[1:]) # strip leading /
+            return redirect(form.next.data)
+#            return redirect(baseurl + form.next.data[1:]) # strip leading /
         
     return render_template('login.html', form=form, baseurl=baseurl)
 

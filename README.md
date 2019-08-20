@@ -24,7 +24,7 @@ Edit your `clapps.conf` to suit your needs. Some fields may require explanation:
 
 * `server.secret` should hold some secret string that will be used to protect against [CSRF](https://en.wikipedia.org/wiki/Cross-site_request_forgery) attacks.
 * `database.url` needs to be configured to point to your database.
-* `email.server` should be an SMTP server through which clapps will send you notifications about new applications.
+* `email.server` should be an SMTP server through which clapps will send you notifications about new applications. If your SMTP server requires authentication, you can set `email.user` and `email.password` too.
 * Under `users`, feel free to add as many users as you like.
 
 Once you start the server using `python main.py` for the clapps main.py, the clapps server will be listening on the port specified in `server.port`. You can have multiple instances of clapps running on the same machine, as long as they use different ports. These instances can share the same database.
