@@ -1,0 +1,7 @@
+flask
+PyMySQL
+sqlalchemy
+Flask-SQLAlchemy-Session
+flask-login
+wtforms
+tornado
