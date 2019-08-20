@@ -310,7 +310,7 @@ def do_unauthorized():
 
         if user:
             login_user(user)
-            return redirect(form.next.data)
+#            return redirect(form.next.data)
             return redirect(baseurl + form.next.data[1:]) # strip leading /
         
     return render_template('login.html', form=form, baseurl=baseurl)
