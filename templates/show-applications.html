@@ -9,16 +9,18 @@
 <div class="content">
 
     <h1>{{ title }}
-
         <span class="floatright">
             {% if current_user.is_authenticated %}
             <a href="logout">&#x2205;</a>
             {% endif %}
         </span>
-
     </h1>
 
     {{ m.process_flash() }}
+
+    <p>
+        <a href="clapps.csv">Download all applications as CSV</a>
+    </p>
 
     <table id="applications" class="display table">
         <thead>

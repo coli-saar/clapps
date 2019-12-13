@@ -4,7 +4,7 @@ import os
 import traceback
 
 import flask
-from flask import render_template, send_from_directory
+from flask import render_template, send_from_directory, make_response
 from flask_login import login_required, login_user, logout_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename, redirect
@@ -24,6 +24,9 @@ from wtforms import Form, StringField, validators, SelectField, IntegerField, Te
 from tables import *
 
 import mail
+
+import io
+import csv
 
 
 @app.route("/", methods=["GET",])
@@ -272,6 +275,23 @@ class ShowApplicationForm(Form):
 @login_required
 def send_cv(path):
     return send_from_directory(fs_upload_dir, path)
+
+@app.route("/clapps.csv", methods=["GET",])
+@login_required
+def generate_csv():
+    code = conf.get("application", "code")
+    f = io.StringIO()
+    fieldnames = ['id', 'firstname', 'lastname', 'birthday', 'application_time', 'level', 'nationality', 'email', 'affiliation', 'aff_city', 'aff_country', 'status', 'comments', 'source']
+    writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
+    writer.writeheader()
+
+    for application in session.query(Application).filter(Application.code == code).all():
+        writer.writerow(application.__dict__)
+
+    output = make_response(f.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=clapps.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
 
 
 #######################################################################################
